@@ -50,7 +50,7 @@ Create an expressive commit message, commit all changes, and push to remote.
 - **Never** amend commits unless explicitly requested
 - If there are no changes to commit, inform me - don't create an empty commit
 - If pre-commit hooks modify files, verify and may need to amend (check authorship first)
-- Show me the commit message before committing for approval
+- Create the commit message and push automatically without pausing for approval
 
 ## Example
 
