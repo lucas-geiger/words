@@ -34,7 +34,7 @@ const posts = (await getCollection('posts'))
           sans-serif;
         line-height: 1.6;
         color: var(--color-text);
-        padding: var(--spacing);
+        padding: var(--spacing) clamp(1rem, 5vw, 3rem);
         max-width: var(--max-width);
         margin: 0 auto;
       }
