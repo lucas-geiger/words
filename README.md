@@ -35,7 +35,7 @@ bun astro build
 bun astro preview
 ```
 
-Visit http://localhost:4321 to see your blog.
+Visit http://localhost:4321/words to see your blog (note: /words is the base path).
 
 ## Project Structure
 
@@ -129,6 +129,7 @@ The site automatically deploys to GitHub Pages when you push to the `main` branc
 
 - **[SPEC.md](SPEC.md)** - Project requirements, decisions, and open questions
 - **[WORKFLOW.md](WORKFLOW.md)** - Complete technical reference and best practices
+- **[DECISIONS.md](DECISIONS.md)** - Setup decisions and rationale (session log)
 - **[CLAUDE.md](CLAUDE.md)** - Guidance for Claude Code AI assistant
 - **[.claude/README.md](.claude/README.md)** - Claude Code configuration and commands
 
