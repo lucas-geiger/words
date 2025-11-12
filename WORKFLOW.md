@@ -31,18 +31,20 @@ bun --bun astro dev
 ### Configuration Files
 
 **astro.config.mjs**
+
 ```javascript
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
   site: 'https://username.github.io',
-  base: '/words',  // Only if not using username.github.io repo
+  base: '/words', // Only if not using username.github.io repo
   output: 'static',
   // Optional: integrate markdown plugins
 });
 ```
 
 **Important Notes:**
+
 - For `username.github.io` repositories, omit the `base` setting
 - For other repositories, `base` must match your repo name with leading slash
 - All internal links must be prefixed with the `base` value when configured
@@ -74,12 +76,13 @@ src/
 ### Content Collections Configuration
 
 **src/content.config.ts**
+
 ```typescript
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
 const posts = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/posts' }),
+  loader: glob({ pattern: '**/*.md', base: './content/posts' }),
   schema: z.object({
     title: z.string(),
     pubDate: z.date(),
@@ -88,11 +91,13 @@ const posts = defineCollection({
     excerpt: z.string().optional(), // For distribution to other platforms
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
-    distributed: z.object({
-      medium: z.boolean().default(false),
-      substack: z.boolean().default(false),
-      linkedin: z.boolean().default(false),
-    }).optional(),
+    distributed: z
+      .object({
+        medium: z.boolean().default(false),
+        substack: z.boolean().default(false),
+        linkedin: z.boolean().default(false),
+      })
+      .optional(),
   }),
 });
 
@@ -104,11 +109,13 @@ export const collections = { posts };
 ### File Naming Convention
 
 Use ISO date format with slug:
+
 ```
 YYYY-MM-DD-slug-of-post.md
 ```
 
 Examples:
+
 - `2020-03-15-my-first-post.md`
 - `2023-12-25-holiday-reflections.md`
 
@@ -116,19 +123,18 @@ Examples:
 
 ```yaml
 ---
-title: "Your Post Title"
+title: 'Your Post Title'
 pubDate: 2025-01-10
-description: "A brief description for SEO and listings"
-author: "Lucas"
-excerpt: "Optional excerpt for distribution to Medium/Substack/LinkedIn"
-tags: ["tech", "blog", "tutorial"]
+description: 'A brief description for SEO and listings'
+author: 'Lucas'
+excerpt: 'Optional excerpt for distribution to Medium/Substack/LinkedIn'
+tags: ['tech', 'blog', 'tutorial']
 draft: false
 distributed:
   medium: false
   substack: false
   linkedin: false
 ---
-
 Your markdown content starts here...
 ```
 
@@ -222,7 +228,7 @@ jobs:
 bun --bun astro dev
 
 # Create new blog post
-touch src/content/posts/$(date +%Y-%m-%d)-new-post.md
+touch content/posts/$(date +%Y-%m-%d)-new-post.md
 
 # Build for production (test locally)
 bun astro build
@@ -261,7 +267,7 @@ git push origin content/new-blog-post
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('posts'))
-  .filter(post => !post.data.draft)
+  .filter((post) => !post.data.draft)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 // Render a post
@@ -296,14 +302,10 @@ const { Content } = await post.render();
 scripts/
 ├── publish.ts           # Publish single blog post
 ├── distribute.ts        # Distribute to Medium/Substack/LinkedIn
-├── migrate.ts           # Migrate historical content
-└── lib/
-    ├── platforms/
-    │   ├── medium.ts
-    │   ├── substack.ts
-    │   └── linkedin.ts
-    └── utils.ts
+└── migrate.ts           # Migrate historical content
 ```
+
+Scripts are standalone TypeScript files - no subdirectories needed.
 
 ### Script Execution
 
@@ -348,30 +350,36 @@ bun run scripts/distribute.ts --post "2025-01-10-my-post" --platforms "medium,li
 ## Best Practices Summary
 
 ### Content
+
 - Write in markdown with consistent frontmatter
 - Use content collections for type safety
 - Preserve historical dates for old posts
 - Draft posts locally before pushing
 
 ### Development
+
 - Use Bun for fast development and tooling
+- Run `bun run lint` before committing
 - Run `astro check` before committing
 - Test production builds locally with `astro preview`
 - Keep dependencies updated
 
 ### Deployment
+
 - Commit lockfile (`bun.lockb`) for reproducible builds
 - Let GitHub Actions handle deployment automatically
 - Monitor workflow runs for errors
 - Test changes in feature branches
 
 ### Distribution
+
 - Track distribution status in frontmatter
 - Preserve original publication dates when cross-posting
 - Handle platform API errors gracefully
 - Respect rate limits
 
 ### Performance
+
 - Minimize JavaScript in static output
 - Optimize images before committing
 - Use Astro's built-in optimizations

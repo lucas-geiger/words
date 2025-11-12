@@ -11,6 +11,7 @@ Ask which post to distribute and to which platform(s).
 Then run the appropriate distribution command using `bun run scripts/distribute.ts` and update the frontmatter to track successful distribution.
 
 Remind me to verify:
+
 - All links are absolute URLs
 - Images are accessible
 - API credentials are configured

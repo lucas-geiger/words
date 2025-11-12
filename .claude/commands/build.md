@@ -7,6 +7,7 @@ Build the static site for production deployment.
 Execute: `bun astro build`
 
 This will:
+
 - Type check all content
 - Build static pages
 - Optimize assets

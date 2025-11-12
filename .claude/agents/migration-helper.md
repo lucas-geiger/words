@@ -38,6 +38,7 @@ Assist with migrating existing blog posts from previous platforms or formats int
 ### Frontmatter Mapping
 
 Common mappings from other platforms:
+
 - WordPress `post_date` → `pubDate`
 - Medium `created_at` → `pubDate`
 - WordPress `post_title` → `title`
@@ -46,6 +47,7 @@ Common mappings from other platforms:
 ### Quality Checks
 
 After migration, verify:
+
 - [ ] All dates are correct and historical
 - [ ] Frontmatter validates against schema
 - [ ] Content renders properly in Astro
@@ -56,6 +58,7 @@ After migration, verify:
 ### Migration Script
 
 The project includes `scripts/migrate.ts` for batch operations. Use this for:
+
 - Processing multiple posts at once
 - Consistent filename generation
 - Automated frontmatter creation

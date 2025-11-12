@@ -23,6 +23,7 @@ This directory contains Claude Code configuration for the Words blog platform.
 ## Settings
 
 **settings.json** configures Claude Code behavior:
+
 - `includeCoAuthoredBy: false` - Disables Claude as git commit co-author
 
 ## Agents
@@ -37,19 +38,27 @@ Invoke agents using the Task tool or by referencing them in prompts.
 
 ## Slash Commands
 
-Quick commands for common operations:
+### WIP (Work in Progress) Commands
 
-- `/new-post` - Create a new blog post
+- `/new-draft` - Create a new draft article in wip/content/
+- `/new-research` - Create a new research note in wip/research/
+- `/promote` - Promote a draft to published content
+- `/list-wip` - List all WIP content (drafts, research, published)
+
+### Development Commands
+
 - `/preview` - Start local development server
 - `/check` - Run type checking and validation
 - `/build` - Build site for production
 - `/distribute` - Distribute content to external platforms
+- `/push` - Commit and push changes with expressive commit message
 
 ## Usage
 
 These configurations are shared in the repository so all contributors have consistent Claude Code behavior and shortcuts.
 
 To use:
+
 1. Ensure Claude Code CLI is installed
 2. Navigate to project directory
 3. Use slash commands or invoke agents as needed

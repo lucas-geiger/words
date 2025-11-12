@@ -5,11 +5,13 @@ This document defines the **requirements, decisions, and open questions** for th
 **For implementation details, see [WORKFLOW.md](WORKFLOW.md) | For overview, see [README.md](README.md)**
 
 ## Overview
+
 A self-hosted static blog published to GitHub Pages, with tooling for content distribution and migration of historical articles.
 
 ## Core Requirements
 
 ### Blog Platform
+
 - **Hosting**: GitHub Pages
 - **Type**: Static site (SSG to be determined)
 - **Build**: GitHub Actions workflow
@@ -17,15 +19,18 @@ A self-hosted static blog published to GitHub Pages, with tooling for content di
 - **Historical Content**: Support for re-publishing several years of existing articles with preserved publication dates
 
 ### TypeScript Tooling (Bun Runtime)
+
 Scripts will be standalone TypeScript files executed via Bun, runnable both locally and in GitHub Actions.
 
 #### Script 1: Blog Publisher
+
 - Publish individual blog articles
 - Process markdown content
 - Generate static site pages
 - Handle metadata (title, date, tags, etc.)
 
 #### Script 2: Content Distributor
+
 - Export blog excerpts to multiple platforms:
   - Medium
   - Substack
@@ -37,6 +42,7 @@ Scripts will be standalone TypeScript files executed via Bun, runnable both loca
 ## Technical Considerations
 
 ### Static Site Generator
+
 - **Selected**: Astro v5+ (chosen for content-first architecture)
 - Features utilized:
   - Content Collections with Zod schema validation
@@ -46,6 +52,7 @@ Scripts will be standalone TypeScript files executed via Bun, runnable both loca
   - Minimal JavaScript output for fast loading
 
 ### Content Structure
+
 - Markdown files with frontmatter for metadata:
   - Title
   - Publication date (historical dates supported)
@@ -55,6 +62,7 @@ Scripts will be standalone TypeScript files executed via Bun, runnable both loca
   - Distribution status (which platforms it's been posted to)
 
 ### Historical Content Migration
+
 - Need process for:
   - Importing existing articles
   - Preserving original publication dates
@@ -62,6 +70,7 @@ Scripts will be standalone TypeScript files executed via Bun, runnable both loca
   - Handling any media/images from old articles
 
 ### Distribution Script Challenges
+
 - Platform API authentication
   - Medium: OAuth or integration tokens
   - Substack: API access (may have limitations)
@@ -73,6 +82,7 @@ Scripts will be standalone TypeScript files executed via Bun, runnable both loca
 - Tracking what's been distributed to avoid duplicates
 
 ### GitHub Actions Integration
+
 - Workflow for building and deploying site
 - Potential workflow for automated content distribution
 - Secure secret management for API keys

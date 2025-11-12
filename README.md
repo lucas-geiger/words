@@ -19,6 +19,12 @@ bun install
 # Start development server
 bun --bun astro dev
 
+# Lint and format check
+bun run lint
+
+# Auto-fix linting and formatting
+bun run lint:fix
+
 # Type check content
 bun astro check
 
@@ -34,17 +40,20 @@ Visit http://localhost:4321 to see your blog.
 ## Project Structure
 
 ```
+├── wip/                     # Work in progress (drafts & research)
+│   ├── content/             # Draft articles (1-name/, 2-name/, etc.)
+│   └── research/            # Research notes (not published)
+├── content/
+│   └── posts/               # Published blog posts (markdown)
 ├── src/
-│   ├── content/
-│   │   └── posts/           # Blog posts (markdown)
 │   ├── pages/
 │   │   └── blog/            # Blog pages
 │   ├── layouts/             # Page layouts
 │   └── components/          # Reusable components
 ├── scripts/                 # TypeScript tooling (Bun)
-│   ├── publish.ts
-│   ├── distribute.ts
-│   └── migrate.ts
+│   ├── publish.ts           # (to be implemented)
+│   ├── distribute.ts        # (to be implemented)
+│   └── migrate.ts           # (to be implemented)
 ├── .claude/                 # Claude Code configuration
 └── .github/
     └── workflows/
@@ -53,14 +62,30 @@ Visit http://localhost:4321 to see your blog.
 
 ## Creating Content
 
-Create a new blog post in `src/content/posts/`:
+### Writing Workflow
+
+This project uses a **work-in-progress (WIP) directory** for drafts and research:
+
+1. **Research**: Write exploratory notes in `wip/research/` - these build your knowledge base but aren't published
+2. **Draft**: Create article drafts in `wip/content/X-article-name/` - numbered directories for each article
+3. **Publish**: When ready, promote draft to `content/posts/YYYY-MM-DD-slug.md` with full frontmatter
+
+### Draft Format (wip/content/)
+
+```
+wip/content/1-my-first-article/draft.md
+```
+
+Work freely without strict formatting - focus on content.
+
+### Published Format (content/posts/)
 
 ```markdown
 ---
-title: "Your Post Title"
+title: 'Your Post Title'
 pubDate: 2025-01-15
-description: "Brief description for SEO"
-tags: ["tech", "blog"]
+description: 'Brief description for SEO'
+tags: ['tech', 'blog']
 distributed:
   medium: false
   substack: false
@@ -71,6 +96,8 @@ Your content here...
 ```
 
 **Filename format**: `YYYY-MM-DD-slug-of-post.md`
+
+See [wip/README.md](wip/README.md) for complete workflow details.
 
 ## Tooling Scripts
 
@@ -89,7 +116,13 @@ bun run scripts/migrate.ts
 
 The site automatically deploys to GitHub Pages when you push to the `main` branch.
 
+**GitHub Actions Workflows**:
+
+- **Deploy** (`.github/workflows/deploy.yml`) - Runs on push to main
+- **Lint** (`.github/workflows/lint.yml`) - Runs on push, PRs, and weekly on Mondays
+
 **Required GitHub Settings**:
+
 - Repository Settings → Pages → Source: "GitHub Actions"
 
 ## Documentation
@@ -102,11 +135,13 @@ The site automatically deploys to GitHub Pages when you push to the `main` branc
 ## Claude Code Support
 
 This project includes Claude Code configuration with:
-- Specialized agents for blog workflows
-- Slash commands for common operations (`/new-post`, `/preview`, `/check`, etc.)
-- Project-specific settings
 
-See [.claude/README.md](.claude/README.md) for details.
+- **WIP workflow commands**: `/new-draft`, `/new-research`, `/promote`, `/list-wip`
+- **Development commands**: `/preview`, `/check`, `/build`, `/distribute`, `/push`
+- **Specialized agents**: blog-post-creator, content-distributor, migration-helper
+- **Project settings**: Git co-author disabled
+
+See [.claude/README.md](.claude/README.md) for complete documentation.
 
 ## Tech Stack
 

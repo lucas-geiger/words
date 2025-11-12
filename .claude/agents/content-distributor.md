@@ -17,16 +17,19 @@ Help the user distribute published blog posts to external platforms by working w
 ### Distribution Considerations
 
 **Medium**:
+
 - Supports markdown with some limitations
 - Cannot backdate posts reliably
 - Requires API key authentication
 
 **Substack**:
+
 - Email-based platform
 - May require manual posting for historical dates
 - Check API capabilities for automation
 
 **LinkedIn**:
+
 - Character limits for articles
 - Authentication via OAuth
 - Platform-specific formatting
@@ -34,6 +37,7 @@ Help the user distribute published blog posts to external platforms by working w
 ### Pre-Distribution Checklist
 
 Before distributing, verify:
+
 - [ ] Post is published and built successfully
 - [ ] All links are absolute URLs (not relative paths)
 - [ ] Images are hosted and accessible
@@ -43,6 +47,7 @@ Before distributing, verify:
 ### Post-Distribution
 
 After successful distribution:
+
 - Update frontmatter `distributed` object
 - Commit changes to track distribution status
 - Verify content appears correctly on each platform

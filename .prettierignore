@@ -1,0 +1,9 @@
+dist/
+.astro/
+node_modules/
+bun.lockb
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+*.min.js
+*.min.css

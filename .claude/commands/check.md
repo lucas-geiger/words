@@ -3,6 +3,7 @@ description: Run type checking and content validation
 ---
 
 Run Astro's type checking and content validation to ensure:
+
 - All content collections have valid frontmatter
 - TypeScript types are correct
 - No configuration errors
