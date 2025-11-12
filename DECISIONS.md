@@ -232,6 +232,80 @@ bun astro preview             # Preview production build
 6. **Q**: Are scripts in subdirectories?
    **A**: No - flat TypeScript files for simplicity
 
+## Session Date: 2025-11-12
+
+### 11. Frontend Architecture Migration
+
+#### Decision: Migrate to Tailwind CSS + Alpine.js via CDN
+
+**From**: Custom CSS with CSS variables in `<style>` blocks
+**To**: Tailwind CSS utility classes + Alpine.js via CDN
+**Date**: 2025-11-12
+
+**Motivation**:
+- Faster prototyping with utility-first CSS
+- No build step required for CSS
+- Easier responsive design with Tailwind's breakpoint system
+- Alpine.js for future interactive features without heavy frameworks
+
+**Implementation**:
+- Converted all three pages: `index.astro`, `blog/index.astro`, `blog/[...slug].astro`
+- Removed all custom `<style>` blocks
+- Added CDN scripts with `is:inline` directive (critical for Astro)
+- Implemented responsive gutters: `px-4 sm:px-8 lg:px-12` (16px → 32px → 48px)
+- Used gray background on `<html>` element to show content container clearly
+
+**Key Technical Details**:
+
+```astro
+<!-- Must use is:inline to prevent Astro from processing CDN scripts -->
+<script is:inline src="https://cdn.tailwindcss.com"></script>
+<script is:inline defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+```
+
+**Design System**:
+- Max width: `max-w-3xl` (768px)
+- Responsive padding: `px-4 sm:px-8 lg:px-12`
+- Typography: `text-4xl` (h1), `text-2xl` (h2), system font stack
+- Colors: `gray-900` (text), `gray-600` (muted), `gray-300` (borders), `blue-600` (links)
+
+#### Bug Fix: Navigation Links
+
+**Problem**: Links were generating incorrect URLs
+- Example: `/words` + `blog` → `/wordsblog` (wrong)
+- Root cause: Missing slash after `BASE_URL`
+
+**Solution**: Always add `/` after `BASE_URL` when concatenating paths
+```astro
+<a href={`${import.meta.env.BASE_URL}/`}>Home</a>
+<a href={`${import.meta.env.BASE_URL}/blog`}>Blog</a>
+<a href={`${import.meta.env.BASE_URL}/blog/${post.id}`}>Post</a>
+```
+
+#### Component Strategy
+
+**Decision**: No layouts or components yet
+**Reasoning**:
+- Pages are simple enough for inline Tailwind classes
+- Avoid premature abstraction
+- Extract components only when 3+ pages share identical patterns
+
+**Future**: Will create layouts/components when clear patterns emerge
+
+### 12. Documentation Updates
+
+**Updated Files**:
+- `WORKFLOW.md`: Added "Frontend Architecture" section to tech stack
+- `WORKFLOW.md`: Added "Pages and Styling" section with Tailwind guidelines
+- `WORKFLOW.md`: Updated directory structure to show actual implementation
+- `DECISIONS.md`: This session log
+
+**New Documentation Sections**:
+- Tailwind CSS guidelines (responsive spacing, typography scale, color palette)
+- Alpine.js usage examples
+- Navigation link patterns (with BASE_URL trailing slash requirement)
+- Page structure pattern with CDN scripts
+
 ## Next Steps
 
 To continue development:

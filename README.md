@@ -5,9 +5,11 @@ A self-hosted static blog platform built with Astro and published to GitHub Page
 ## Features
 
 - **Modern Stack**: Astro v5+ static site generator with Bun runtime
+- **Utility-First Styling**: Tailwind CSS via CDN for rapid development
+- **Lightweight Interactivity**: Alpine.js for DOM manipulation without heavy frameworks
 - **Type-Safe Content**: Content collections with Zod schema validation
 - **Historical Content**: Preserve and re-publish articles with original dates
-- **Multi-Platform Distribution**: Automated distribution to Medium, Substack, and LinkedIn
+- **Multi-Platform Distribution**: Automated distribution to Medium, Substack, and LinkedIn (planned)
 - **Automated Deployment**: GitHub Actions workflow for continuous deployment
 
 ## Quick Start
@@ -47,9 +49,9 @@ Visit http://localhost:4321/words to see your blog (note: /words is the base pat
 │   └── posts/               # Published blog posts (markdown)
 ├── src/
 │   ├── pages/
-│   │   └── blog/            # Blog pages
-│   ├── layouts/             # Page layouts
-│   └── components/          # Reusable components
+│   │   └── blog/            # Blog pages (Tailwind + Alpine)
+│   ├── layouts/             # Page layouts (future)
+│   └── components/          # Reusable components (future)
 ├── scripts/                 # TypeScript tooling (Bun)
 │   ├── publish.ts           # (to be implemented)
 │   ├── distribute.ts        # (to be implemented)

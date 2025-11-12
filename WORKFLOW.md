@@ -8,10 +8,33 @@ This document is the **complete technical reference** for the Words blog project
 
 - **Static Site Generator**: Astro v5+
 - **Runtime**: Bun (for development and tooling scripts)
+- **Styling**: Tailwind CSS v3+ (via CDN)
+- **JavaScript Framework**: Alpine.js v3+ (via CDN)
 - **Deployment**: GitHub Pages
 - **CI/CD**: GitHub Actions
 - **Content Format**: Markdown with YAML frontmatter
 - **Type Safety**: TypeScript with Zod schema validation
+
+### Frontend Architecture
+
+**CSS Strategy**: This project uses Tailwind CSS loaded from CDN rather than compiled. This approach:
+- Eliminates build step for CSS
+- Provides instant prototyping with utility classes
+- Reduces bundle configuration complexity
+- Works seamlessly with Astro's hot reload
+
+**JavaScript Strategy**: Alpine.js is used for DOM manipulation and interactivity. It provides:
+- Declarative reactive components
+- Minimal JavaScript footprint
+- No build step required
+- Clean integration with server-rendered HTML
+
+**Important**: All CDN script tags must use the `is:inline` directive in Astro to prevent processing:
+
+```astro
+<script is:inline src="https://cdn.tailwindcss.com"></script>
+<script is:inline defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+```
 
 ## Project Setup
 
@@ -54,24 +77,46 @@ export default defineConfig({
 ### Directory Organization
 
 ```
-src/
-├── content.config.ts          # Content collections configuration
-├── content/
+.
+├── content/                   # Published content (root-level, not in src/)
 │   └── posts/                 # Blog posts collection
 │       ├── 2020-03-15-historical-post.md
 │       ├── 2023-06-20-recent-post.md
 │       └── 2025-01-10-new-post.md
-├── pages/
-│   ├── index.astro            # Homepage
-│   ├── blog/
-│   │   ├── index.astro        # Blog list page
-│   │   └── [...slug].astro    # Dynamic blog post pages
-│   └── 404.astro
-├── layouts/
-│   └── BlogPost.astro         # Blog post layout
-└── components/
-    └── [shared components]
+├── wip/                       # Work-in-progress content
+│   ├── content/               # Draft articles
+│   │   ├── 1-article-name/
+│   │   │   └── draft.md
+│   │   └── 2-another-article/
+│   │       └── draft.md
+│   └── research/              # Research notes (knowledge base, not published)
+│       └── topic-name.md
+├── src/
+│   ├── content.config.ts      # Content collections configuration
+│   ├── pages/
+│   │   ├── index.astro        # Homepage (Tailwind + Alpine)
+│   │   └── blog/
+│   │       ├── index.astro    # Blog list page (Tailwind + Alpine)
+│   │       └── [...slug].astro # Dynamic blog post pages (Tailwind + Alpine)
+│   ├── layouts/               # Reusable layouts (future)
+│   └── components/            # Reusable components (future)
+├── scripts/                   # Standalone TypeScript utility scripts
+│   ├── distribute.ts          # (planned) Multi-platform distribution
+│   ├── migrate.ts             # (planned) Historical content migration
+│   └── publish.ts             # (planned) Publishing automation
+├── .claude/                   # Claude Code configuration
+│   ├── agents/                # Specialized agents
+│   ├── commands/              # Slash commands
+│   └── settings.json          # Project settings
+└── public/                    # Static assets
 ```
+
+**Key Architectural Decisions**:
+
+1. **No layouts or components yet**: All pages use inline Tailwind classes. Layouts/components will be extracted when patterns emerge.
+2. **Content location**: Published posts are in `content/posts/` (root-level, outside `src/`) for cleaner separation.
+3. **WIP workflow**: Three-tier content system (research → drafts → published).
+4. **Scripts**: Flat TypeScript files, no subdirectories.
 
 ### Content Collections Configuration
 
@@ -102,6 +147,109 @@ const posts = defineCollection({
 });
 
 export const collections = { posts };
+```
+
+## Pages and Styling
+
+### Page Architecture
+
+All pages currently use **inline Tailwind CSS classes** - no separate layout components yet. This approach:
+- Speeds up initial development
+- Avoids premature abstraction
+- Makes each page self-contained and easy to understand
+
+Layouts and components will be extracted when clear patterns emerge across 3+ pages.
+
+### Page Structure Pattern
+
+Each page follows this structure:
+
+```astro
+---
+// Frontmatter: imports and data fetching
+import { getCollection } from 'astro:content';
+const posts = await getCollection('posts');
+---
+
+<!doctype html>
+<html lang="en" class="bg-gray-200">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Page Title - Words</title>
+
+    <!-- Tailwind CSS and Alpine.js from CDN -->
+    <script is:inline src="https://cdn.tailwindcss.com"></script>
+    <script is:inline defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  </head>
+  <body class="bg-white max-w-3xl mx-auto px-4 sm:px-8 lg:px-12 py-8">
+    <header class="mb-16 pb-8 border-b border-gray-300">
+      <h1 class="text-4xl font-bold tracking-tight">Words</h1>
+      <nav class="flex gap-6">
+        <a href={`${import.meta.env.BASE_URL}/`}>Home</a>
+        <a href={`${import.meta.env.BASE_URL}/blog`}>All Posts</a>
+      </nav>
+    </header>
+    <main>
+      <!-- Page content -->
+    </main>
+  </body>
+</html>
+```
+
+### Tailwind CSS Guidelines
+
+**Responsive Spacing**:
+- Use responsive padding: `px-4 sm:px-8 lg:px-12`
+- This provides 16px → 32px → 48px gutters as viewport grows
+
+**Typography Scale**:
+- H1 (homepage): `text-4xl font-bold tracking-tight`
+- H2 (sections): `text-2xl font-semibold`
+- Body text: `text-gray-900` with `leading-relaxed`
+- Muted text: `text-gray-600`
+
+**Color Palette**:
+- Text: `text-gray-900` (primary), `text-gray-600` (secondary)
+- Borders: `border-gray-300`
+- Background: `bg-white` (content), `bg-gray-200` (html/viewport)
+- Accent: `text-blue-600` (links on hover)
+
+**Prose Styling** (for blog posts):
+Use Tailwind's typography plugin classes for markdown content:
+```astro
+<div class="prose prose-lg max-w-none
+  prose-headings:font-semibold
+  prose-a:text-blue-600
+  prose-code:bg-gray-100">
+  <Content />
+</div>
+```
+
+### Navigation Links
+
+**Critical**: Always include trailing slash after `BASE_URL` when building paths:
+
+```astro
+<!-- ✅ Correct -->
+<a href={`${import.meta.env.BASE_URL}/`}>Home</a>
+<a href={`${import.meta.env.BASE_URL}/blog`}>Blog</a>
+<a href={`${import.meta.env.BASE_URL}/blog/${post.id}`}>Post</a>
+
+<!-- ❌ Wrong - creates /wordsblog instead of /words/blog -->
+<a href={`${import.meta.env.BASE_URL}blog`}>Blog</a>
+```
+
+### Alpine.js Usage
+
+Alpine.js is loaded but not yet used. When needed for interactivity:
+
+```astro
+<!-- Toggle example -->
+<div x-data="{ open: false }">
+  <button @click="open = !open">Toggle</button>
+  <div x-show="open">Content</div>
+</div>
 ```
 
 ## Markdown Content Standards
